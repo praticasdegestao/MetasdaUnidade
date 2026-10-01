@@ -89,16 +89,37 @@
   .bar-item .bar{height:100%;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:4px;}
   .bar-item .val{font-weight:700;color:#0f2027;}
 
-  /* SANKEY */
-  .sankey-box{overflow:auto;max-height:720px;border:1px solid #eef1f6;border-radius:10px;}
-  .sankey-cols{display:grid;grid-template-columns:30.3% 26.7% 27.2% 15.8%;font-size:11px;font-weight:700;color:#475569;padding:0 0 6px 0;min-width:900px;}
-  #sankey svg{display:block;min-width:900px;}
-  #sankey .lnk{fill-opacity:.28;transition:fill-opacity .15s;}
-  #sankey.hl .lnk{fill-opacity:.06;}
-  #sankey.hl .lnk.on{fill-opacity:.6;}
-  #sankey .nd rect{cursor:pointer;}
-  #sankey .nd text{font-size:11px;fill:#1f2937;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;cursor:pointer;}
-  #sankey .nd:hover rect{stroke:#0f2027;stroke-width:1.5;}
+  /* ÁRVORE DE DESDOBRAMENTO */
+  .sankey-box{overflow:auto;max-height:760px;border:1px solid #eef1f6;border-radius:10px;padding:0 14px 14px;background:#fbfcfe;}
+  .tr-head{display:grid;grid-template-columns:290px 24px 230px 24px 1fr;position:sticky;top:0;z-index:2;background:#fbfcfe;padding:10px 0 8px;margin-bottom:4px;border-bottom:1px solid #eef1f6;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#64748b;min-width:880px;}
+  .tr-head>div:nth-child(2){grid-column:3}.tr-head>div:nth-child(3){grid-column:5}
+  #sankey{min-width:880px;}
+  .tr-meta{display:flex;align-items:center;padding:10px 0;border-bottom:1px dashed #e5eaf1;}
+  .tr-meta:last-child{border-bottom:0;}
+  .tr-row{display:flex;align-items:center;position:relative;}
+  .tr-kids{display:flex;flex-direction:column;gap:6px;position:relative;padding-left:24px;flex:1;min-width:0;}
+  .tr-kids::before{content:'';position:absolute;left:0;top:50%;width:12px;border-top:1.5px solid #cbd5e1;}
+  .tr-kids>.tr-row::before{content:'';position:absolute;left:-12px;top:50%;width:12px;border-top:1.5px solid #cbd5e1;}
+  .tr-kids>.tr-row::after{content:'';position:absolute;left:-12px;top:-3px;bottom:-3px;border-left:1.5px solid #cbd5e1;}
+  .tr-kids>.tr-row:first-child::after{top:50%;}
+  .tr-kids>.tr-row:last-child::after{bottom:50%;}
+  .tr-kids>.tr-row:only-child::after{display:none;}
+  .tr-card{background:#fff;border:1px solid #e2e8f0;border-left:4px solid var(--c);border-radius:8px;padding:7px 10px 8px;cursor:pointer;transition:box-shadow .12s,border-color .12s;flex:none;}
+  .tr-card:hover,.tr-card:focus-visible{box-shadow:0 3px 10px rgba(15,32,39,.12);border-color:#94a3b8;outline:none;}
+  .tr-card.sel{background:#ecfdf5;box-shadow:0 0 0 2px #0f766e;}
+  .tr-card.nolink{cursor:default;}
+  .tr-card.c1{width:290px;} .tr-card.c2{width:230px;background:color-mix(in srgb,var(--c) 7%,#fff);} .tr-card.c3{flex:1;min-width:280px;}
+  .tr-t{font-size:12px;font-weight:600;color:#1f2937;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .tr-card.c3 .tr-t{font-weight:500;-webkit-line-clamp:2;}
+  .tr-t .code{margin-right:5px;}
+  .tr-m{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11px;color:#64748b;}
+  .tr-m b{color:#0f2027;font-size:12.5px;}
+  .tr-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;background:#eef1f6;flex:1;min-width:50px;}
+  .tr-bar i{display:block;height:100%;}
+  .tr-pill{font-size:10px;font-weight:700;padding:1px 6px;border-radius:9px;white-space:nowrap;}
+  .tr-pill.bad{background:#fde8e4;color:#c0392b;} .tr-pill.ok{background:#e3f9f1;color:#047857;}
+  .tr-pill.warn{background:#fef3d6;color:#a16207;}
+  .tree.lv2 .tr-card.c2{flex:1;max-width:560px;}
   .legend-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:11px;color:#475569;}
   .legend-row span{display:inline-flex;align-items:center;gap:5px;}
   .legend-row i{width:10px;height:10px;border-radius:2px;display:inline-block;}
@@ -149,6 +170,10 @@
   .table-head h3{font-size:14px;font-weight:700;color:#0f2027;display:flex;align-items:center;gap:8px;}
   .search{padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12px;width:280px;max-width:100%;font-family:inherit;background:#f8fafc;}
   .search:focus{outline:none;border-color:#0984e3;background:#fff;}
+  .cfilters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin:0 0 12px;}
+  .cfilters label{display:flex;flex-direction:column;gap:3px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#64748b;}
+  .cfilters select{min-width:180px;max-width:300px;}
+  .cfilters select.on{border-color:#0f766e;background:#ecfdf5;}
   select.sm{padding:6px 8px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12px;font-family:inherit;background:#f8fafc;}
   .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid #eef1f6;max-height:560px;overflow-y:auto;}
   table.dt{width:100%;border-collapse:collapse;font-size:11.5px;}
@@ -193,7 +218,7 @@
   .preset{border:1px solid #dbe3ec;background:#f8fafc;color:#334155;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
   .preset:hover{border-color:#0984e3;color:#0984e3;}
   .preset.on{background:#0f2027;border-color:#0f2027;color:#fff;}
-  .fp-primary{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;padding:14px 22px 18px;}
+  .fp-primary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:14px 22px 18px;}
   @media(max-width:1350px){.fp-primary{grid-template-columns:repeat(4,minmax(0,1fr));}}
   @media(max-width:900px){.fp-primary{grid-template-columns:repeat(2,minmax(0,1fr));}}
   @media(max-width:700px){.fp-primary{grid-template-columns:1fr;}}
@@ -301,7 +326,7 @@
   @media print{
     .hd-actions,.imp-overlay,.toast{display:none !important;}
     html,body{background:#fff !important;}
-    nav.jump,.fp-actions,.fp-presets,.fp-adv,.fp-note,.ibtn,.tools .btn,.tools .btn-ghost,.pager,.search,#comp-sort,#sec-reg{display:none !important;}
+    nav.jump,.fp-actions,.fp-presets,.fp-adv,.fp-note,.ibtn,.tools .btn,.tools .btn-ghost,.pager,.search,#comp-sort,#comp-filters,#sec-reg{display:none !important;}
     .card,.table-card,.kpi,.fpanel,header{box-shadow:none !important;border:1px solid #e2e8f0;break-inside:avoid;}
     .sec-title,.sec-title p{color:#0f2027 !important;}
     .table-wrap,.hm-wrap,.sankey-box{max-height:none !important;overflow:visible !important;}
@@ -331,6 +356,7 @@
 
   <nav class="jump" aria-label="Seções">
     <a href="#sec-filtros">Filtros</a>
+    <a href="#sec-lista">Lista de compromissos</a>
     <a href="#sec-rastreio">Compromissos × metas × portfólio × desafio</a>
     <a href="#sec-metas">Metas estratégicas</a>
     <a href="#sec-comp">Compromissos</a>
@@ -362,29 +388,80 @@
 
   <div class="kpi-grid" id="kpi-grid"></div>
 
+  <div class="table-card" id="sec-lista" style="scroll-margin-top:70px">
+    <div class="table-head">
+      <div>
+        <div class="eyebrow">Quadro executivo</div>
+        <h3>Carteira de compromissos <span class="tag" id="comp-count">—</span></h3>
+        <div class="csub" style="margin:4px 0 0">Situação, prazo, responsável e desempenho de cada compromisso da Unidade.</div>
+      </div>
+      <div class="tools">
+        <input type="text" id="comp-search" class="search" placeholder="🔎 Buscar compromisso, meta, desafio, responsável…" aria-label="Buscar compromisso"/>
+        <select id="comp-sort" class="sm" aria-label="Ordenar">
+          <option value="meta">Ordenar por meta</option>
+          <option value="res">Mais resultados</option>
+          <option value="alc-">Menor alcance primeiro</option>
+          <option value="alc+">Maior alcance primeiro</option>
+          <option value="fim">Término mais próximo</option>
+        </select>
+        <button class="btn-ghost" id="comp-csv">⭳ Exportar CSV</button>
+      </div>
+    </div>
+    <div class="cfilters" id="comp-filters">
+      <label>Situação<select id="cf-sit" class="sm cf-sel" aria-label="Filtrar por situação"></select></label>
+      <label>Participação<select id="cf-part" class="sm cf-sel" aria-label="Filtrar por participação"></select></label>
+      <label>Responsável<select id="cf-resp" class="sm cf-sel" aria-label="Filtrar por responsável"></select></label>
+      <button class="btn-ghost" id="cf-clear" hidden>× Limpar filtros da lista</button>
+    </div>
+    <div class="table-wrap">
+      <table class="dt" id="tbl-comp">
+        <thead><tr>
+          <th data-s="meta" style="min-width:360px">Compromisso</th>
+          <th data-s="fim">Situação e prazo</th>
+          <th>Participação</th>
+          <th>Responsável</th>
+          <th class="num">Entregas</th>
+          <th data-s="res" style="min-width:150px">Resultados</th>
+          <th class="num" data-s="alc">Alcance</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="comp-body"></tbody>
+      </table>
+    </div>
+    <div class="pager">
+      <div id="cpg-info">—</div>
+      <div><button id="cpg-prev">← Anterior</button><span id="cpg-cur" style="margin:0 10px">Página 1</span><button id="cpg-next">Próxima →</button></div>
+    </div>
+  </div>
+
   <!-- ===== RASTREABILIDADE ===== -->
   <div class="sec-title" id="sec-rastreio"><h2>Compromissos × metas × portfólio × desafio de inovação</h2><p>Como cada compromisso da Unidade se conecta à estratégia e o que já entregou em resultados. Clique em qualquer elemento para filtrar.</p></div>
 
   <div class="card" style="margin-top:18px">
     <div class="card-head">
       <div>
-        <h3><span class="dot" style="background:#0984e3"></span>Fluxo meta estratégica → portfólio → desafio de inovação → situação</h3>
-        <div class="csub" id="sk-sub">Espessura proporcional ao número de compromissos</div>
+        <h3><span class="dot" style="background:#0984e3"></span>Desdobramento: meta estratégica → portfólio → desafio de inovação</h3>
+        <div class="csub" id="sk-sub">—</div>
       </div>
       <div class="tools">
         Medir por
-        <div class="seg" role="group" aria-label="Medida do fluxo">
+        <div class="seg" role="group" aria-label="Medida">
           <button data-m="comp" class="on">Compromissos</button>
           <button data-m="res">Resultados</button>
+        </div>
+        Detalhar até
+        <div class="seg" role="group" aria-label="Nível de detalhe">
+          <button data-lv="2">Portfólio</button>
+          <button data-lv="3" class="on">Desafio</button>
         </div>
         <label><input type="checkbox" id="sk-gestao"> Incluir compromissos sem desafio (gestão)</label>
       </div>
     </div>
-    <div class="sankey-box">
-      <div class="sankey-cols"><div>Meta estratégica</div><div>Portfólio</div><div>Desafio de inovação</div><div id="sk-lastcol">Status do compromisso</div></div>
+    <div class="legend-row" id="sk-legend" style="margin:0 0 10px"></div>
+    <div class="sankey-box" id="tree-box">
+      <div class="tr-head"><div>Meta estratégica</div><div>Portfólio</div><div class="tr-h3">Desafio de inovação</div></div>
       <div id="sankey"></div>
     </div>
-    <div class="legend-row" id="sk-legend"></div>
   </div>
 
   <div class="card" style="margin-top:18px">
@@ -475,46 +552,6 @@
       <h3><span class="dot" style="background:#fdcb6e"></span>Responsáveis por compromisso</h3>
       <div class="csub">Número de compromissos sob cada responsável</div>
       <div id="rank-compresp" class="bar-list"></div>
-    </div>
-  </div>
-
-  <div class="table-card">
-    <div class="table-head">
-      <div>
-        <div class="eyebrow">Quadro executivo</div>
-        <h3>Carteira de compromissos <span class="tag" id="comp-count">—</span></h3>
-        <div class="csub" style="margin:4px 0 0">Situação, prazo, responsável e desempenho de cada compromisso da Unidade.</div>
-      </div>
-      <div class="tools">
-        <input type="text" id="comp-search" class="search" placeholder="🔎 Buscar compromisso, meta, desafio, responsável…" aria-label="Buscar compromisso"/>
-        <select id="comp-sort" class="sm" aria-label="Ordenar">
-          <option value="meta">Ordenar por meta</option>
-          <option value="res">Mais resultados</option>
-          <option value="alc-">Menor alcance primeiro</option>
-          <option value="alc+">Maior alcance primeiro</option>
-          <option value="fim">Término mais próximo</option>
-        </select>
-        <button class="btn-ghost" id="comp-csv">⭳ Exportar CSV</button>
-      </div>
-    </div>
-    <div class="table-wrap">
-      <table class="dt" id="tbl-comp">
-        <thead><tr>
-          <th data-s="meta" style="min-width:360px">Compromisso</th>
-          <th data-s="fim">Situação e prazo</th>
-          <th>Participação</th>
-          <th>Responsável</th>
-          <th class="num">Entregas</th>
-          <th data-s="res" style="min-width:150px">Resultados</th>
-          <th class="num" data-s="alc">Alcance</th>
-          <th></th>
-        </tr></thead>
-        <tbody id="comp-body"></tbody>
-      </table>
-    </div>
-    <div class="pager">
-      <div id="cpg-info">—</div>
-      <div><button id="cpg-prev">← Anterior</button><span id="cpg-cur" style="margin:0 10px">Página 1</span><button id="cpg-next">Próxima →</button></div>
     </div>
   </div>
 
@@ -760,7 +797,7 @@ const FG = [
 const FDEF = {}; FG.forEach(g=>g.f.forEach(([k,l,disp,sorter])=>FDEF[k]={label:l,disp:disp||(v=>v),sorter:sorter||cmp}));
 const FILTERS = {}; Object.keys(FDEF).forEach(k=>FILTERS[k]='');
 
-const PRIMARY = ['objetivo','meta','portfolio','desafio','comp_st','comp_fim','res_sit'];
+const PRIMARY = ['objetivo','meta','portfolio','desafio','comp','comp_st','comp_fim','res_sit'];
 (function buildFilterUI(){
   const sel = k => `<div class="flt"><label for="f-${k}">${FDEF[k].label}</label><select id="f-${k}" data-k="${k}"></select></div>`;
   document.getElementById('flt-primary').innerHTML = PRIMARY.map(sel).join('');
@@ -831,7 +868,7 @@ document.getElementById('fchips').addEventListener('click', e=>{ const b=e.targe
 document.getElementById('btn-clear').addEventListener('click', ()=>{
   Object.keys(FILTERS).forEach(k=>FILTERS[k]='');
   document.getElementById('tbl-search').value=''; SEARCH='';
-  document.getElementById('comp-search').value=''; CSEARCH='';
+  document.getElementById('comp-search').value=''; CSEARCH=''; Object.keys(CF).forEach(k=>CF[k]='');
   page=0; cpage=0; refresh();
 });
 
@@ -918,105 +955,106 @@ function renderKPIs(data, AG){
     `<div class="kpi" style="--c:${c}"><div class="icon" style="color:${c}">${ic}</div><div class="label">${l}</div><div class="val">${typeof v==='number'?fmt(v):v}</div><div class="cap">${esc(cap)}</div></div>`).join('');
 }
 
-// ========= SANKEY =========
-const SK = {metric:'comp', gestao:false};
+// ========= ÁRVORE DE DESDOBRAMENTO (meta → portfólio → desafio) =========
+const SK = {metric:'comp', gestao:false, lv:3};
 document.querySelectorAll('.seg button[data-m]').forEach(b=>b.addEventListener('click',()=>{
   SK.metric=b.dataset.m; document.querySelectorAll('.seg button[data-m]').forEach(x=>x.classList.toggle('on',x===b)); renderSankey(CUR);
 }));
+document.querySelectorAll('.seg button[data-lv]').forEach(b=>b.addEventListener('click',()=>{
+  SK.lv=+b.dataset.lv; document.querySelectorAll('.seg button[data-lv]').forEach(x=>x.classList.toggle('on',x===b)); renderSankey(CUR);
+}));
 document.getElementById('sk-gestao').addEventListener('change', e=>{ SK.gestao=e.target.checked; renderSankey(CUR); });
 
+function skCats(){
+  if(SK.metric==='res') return RES_ORDER.map(k=>({k,l:RES_SHORT[k],c:colorFor(k)}));
+  return [
+    {k:'Ativo – no prazo',l:'Ativo no prazo',c:'#00b894'},
+    {k:'Ativo – encerra em '+YEAR,l:'Ativo, encerra em '+YEAR,c:'#fdcb6e'},
+    {k:'Ativo – prazo vencido',l:'Ativo com prazo vencido',c:'#e17055'},
+    {k:'Inativo',l:'Inativo',c:'#b2bec3'}];
+}
 function renderSankey(data){
-  const host=document.getElementById('sankey');
-  const m=SK.metric;
+  const host=document.getElementById('sankey'), box=document.getElementById('tree-box');
+  const m=SK.metric, unit1=m==='comp'?'compromisso':'resultado', unitN=m==='comp'?'compromissos':'resultados';
   document.getElementById('sk-sub').textContent = m==='comp'
-    ? 'Espessura proporcional ao número de compromissos; última coluna mostra o status do compromisso'
-    : 'Espessura proporcional ao número de resultados (ações gerenciais e projetos); última coluna mostra a situação do resultado';
-  document.getElementById('sk-lastcol').textContent = m==='comp' ? 'Status do compromisso' : 'Situação do resultado';
+    ? 'Cada caixa mostra quantos compromissos estão naquele ramo; a barra colorida mostra a situação deles. Clique em uma caixa para filtrar o painel.'
+    : 'Cada caixa mostra quantos resultados (ações gerenciais e projetos) estão naquele ramo; a barra mostra a situação deles. Clique em uma caixa para filtrar o painel.';
+  const cats=skCats(), catIdx=new Map(cats.map((c,i)=>[c.k,i]));
   const seen=new Set(), items=[];
   for(const r of data){
     const key = m==='comp' ? r.comp_id : r.res_key;
     if(!key || seen.has(key)) continue;
     if(!SK.gestao && !r.des_id) continue;
     seen.add(key);
-    items.push([r.meta_id, r.portfolio||'∅', r.des_id||'∅', (m==='comp'?r.comp_st:r.res_sit)||'(sem status)']);
+    let st;
+    if(m==='comp'){ const C=D.comp[r.comp_id]; st=C?compSit(C):(r.comp_st||'(sem status)'); }
+    else { st=NORM[r.res_sit]||r.res_sit||'(sem situação)'; }
+    if(!catIdx.has(st)){ catIdx.set(st,cats.length); cats.push({k:st,l:st,c:colorFor(st)}); }
+    items.push({me:r.meta_id, p:r.des_id?(r.portfolio||'∅'):'∅', de:r.des_id||'∅', st});
   }
-  if(!items.length){ host.innerHTML='<div class="empty">Nenhum fluxo para os filtros aplicados. Marque "Incluir compromissos sem desafio" ou limpe filtros.</div>'; document.getElementById('sk-legend').innerHTML=''; return; }
+  // legenda: só situações presentes
+  const present=new Set(items.map(i=>i.st));
+  document.getElementById('sk-legend').innerHTML = '<span style="font-weight:600;color:#334155">Situação '+(m==='comp'?'do compromisso':'do resultado')+':</span>'+
+    cats.filter(c=>present.has(c.k)).map(c=>`<span><i style="background:${c.c}"></i>${esc(c.l)}</span>`).join('');
+  if(!items.length){ host.innerHTML='<div class="empty">Nada a mostrar para os filtros aplicados. Marque "Incluir compromissos sem desafio" ou limpe filtros.</div>'; return; }
 
-  const cols=[new Map(),new Map(),new Map(),new Map()], links=[new Map(),new Map(),new Map()];
+  // agrega em árvore
+  const newNode=()=>({n:0,st:new Array(cats.length).fill(0),kids:new Map()});
+  const root=newNode();
   items.forEach(it=>{
-    it.forEach((k,i)=>cols[i].set(k,(cols[i].get(k)||0)+1));
-    for(let i=0;i<3;i++){ const lk=it[i]+'\u0001'+it[i+1]; links[i].set(lk,(links[i].get(lk)||0)+1); }
+    const i=catIdx.get(it.st);
+    let a=root.kids.get(it.me); if(!a){ a=newNode(); root.kids.set(it.me,a); }
+    let b=a.kids.get(it.p); if(!b){ b=newNode(); a.kids.set(it.p,b); }
+    let c=b.kids.get(it.de); if(!c){ c=newNode(); b.kids.set(it.de,c); }
+    [a,b,c].forEach(x=>{ x.n++; x.st[i]++; });
   });
-  const o0=[...cols[0].keys()].sort((a,b)=>cmp(metaKey(a),metaKey(b)));
-  const bary=(ci,pos)=>{ const acc=new Map(); links[ci-1].forEach((v,lk)=>{ const [a,b]=lk.split('\u0001'); const o=acc.get(b)||{s:0,w:0}; o.s+=pos.get(a)*v; o.w+=v; acc.set(b,o); }); return k=>acc.get(k).s/acc.get(k).w; };
-  const p0=new Map(o0.map((k,i)=>[k,i])); const b1=bary(1,p0);
-  const o1=[...cols[1].keys()].sort((a,b)=>b1(a)-b1(b));
-  const p1=new Map(o1.map((k,i)=>[k,i])); const b2=bary(2,p1);
-  const o2=[...cols[2].keys()].sort((a,b)=>(p1.get(D.des[a]?D.des[a].p:'∅')??99)-(p1.get(D.des[b]?D.des[b].p:'∅')??99) || b2(a)-b2(b));
-  const stOrder = m==='comp' ? ['Ativo','Inativo'] : RES_ORDER;
-  const o3=[...cols[3].keys()].sort((a,b)=>((stOrder.indexOf(a)+99)%99)-((stOrder.indexOf(b)+99)%99));
-  const orders=[o0,o1,o2,o3];
-
-  const W=1200, NW=12, PAD=5, MINH=13, X=[4,364,684,1010];
-  const maxN=Math.max(...orders.map(o=>o.length)), total=items.length;
-  const H=Math.max(380, Math.ceil(maxN*(MINH+PAD)*1.35));
-  const colH=(ci,k)=>orders[ci].reduce((s,key)=>s+Math.max(MINH,cols[ci].get(key)*k),0)+PAD*(orders[ci].length-1);
-  let lo=0, hi=H/total;
-  for(let it=0;it<40;it++){ const mid=(lo+hi)/2; if(orders.every((_,ci)=>colH(ci,mid)<=H-8)) lo=mid; else hi=mid; }
-  const k=lo;
-  const N=orders.map((ord,ci)=>{
-    const sum=colH(ci,k); let y=(H-sum)/2; const mp=new Map();
-    ord.forEach((key,idx)=>{ const h=Math.max(MINH,cols[ci].get(key)*k); mp.set(key,{y,h,v:cols[ci].get(key),out:0,in:0,idx}); y+=h+PAD; });
-    return mp;
-  });
-  const nodeColor=(ci,key)=> ci===0 ? (D.meta[key].v?'#00b894':'#95a5a6') : ci===1 ? portColor(key) : ci===2 ? portColor(D.des[key]?D.des[key].p:'') : colorFor(key);
-  const nodeLabel=(ci,key)=> ci===0 ? trunc(metaFull(key),46) : ci===1 ? (key==='∅'?'Sem portfólio':trunc(key,34)) : ci===2 ? (key==='∅'?'Sem desafio (gestão)':trunc(D.des[key].t,48)) : (RES_SHORT[key]||key);
-  const nodeFull=(ci,key)=> ci===0 ? metaFull(key) : ci===1 ? (key==='∅'?'Sem portfólio':key) : ci===2 ? (key==='∅'?'Sem desafio (gestão)':D.des[key].t+' ['+D.des[key].p+']') : key;
-  const unit = m==='comp' ? 'compromisso(s)' : 'resultado(s)';
-
-  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Diagrama de fluxo entre metas, portfólios, desafios e situação">`;
-  for(let i=0;i<3;i++){
-    const S=N[i], T=N[i+1];
-    const arr=[...links[i]].map(([lk,v])=>{ const [a,b]=lk.split('\u0001'); return {a,b,v}; });
-    arr.sort((p,q)=>T.get(p.b).y-T.get(q.b).y);
-    arr.forEach(l=>{ const s=S.get(l.a); l.sh=l.v*s.h/s.v; l.sy=s.y+s.out; s.out+=l.sh; });
-    arr.sort((p,q)=>S.get(p.a).y-S.get(q.a).y);
-    arr.forEach(l=>{ const t=T.get(l.b); l.th=l.v*t.h/t.v; l.ty=t.y+t.in; t.in+=l.th; });
-    arr.forEach(l=>{
-      const x0=X[i]+NW, x1=X[i+1], xm=(x0+x1)/2;
-      const d=`M${x0},${l.sy.toFixed(1)}C${xm},${l.sy.toFixed(1)} ${xm},${l.ty.toFixed(1)} ${x1},${l.ty.toFixed(1)}L${x1},${(l.ty+l.th).toFixed(1)}C${xm},${(l.ty+l.th).toFixed(1)} ${xm},${(l.sy+l.sh).toFixed(1)} ${x0},${(l.sy+l.sh).toFixed(1)}Z`;
-      const col = i===2 ? colorFor(l.b) : portColor(i===0 ? l.b : l.a);
-      svg+=`<path class="lnk" data-l="${i}:${S.get(l.a).idx}:${T.get(l.b).idx}" d="${d}" fill="${col}"><title>${esc(nodeFull(i,l.a))} → ${esc(nodeFull(i+1,l.b))}: ${l.v} ${unit}</title></path>`;
-    });
-  }
-  orders.forEach((ord,ci)=>ord.forEach(key=>{
-    const n=N[ci].get(key);
-    svg+=`<g class="nd" data-c="${ci}" data-i="${n.idx}" tabindex="0"><rect x="${X[ci]}" y="${n.y.toFixed(1)}" width="${NW}" height="${n.h.toFixed(1)}" rx="2" fill="${nodeColor(ci,key)}"/><text x="${X[ci]+NW+6}" y="${(n.y+n.h/2).toFixed(1)}" dy=".35em">${esc(nodeLabel(ci,key))} (${n.v})</text><title>${esc(nodeFull(ci,key))}: ${n.v} ${unit}. Clique para filtrar.</title></g>`;
-  }));
-  svg+='</svg>';
-  host.innerHTML=svg;
-
-  const paths=new Map(); host.querySelectorAll('.lnk').forEach(p=>paths.set(p.dataset.l,p));
-  const idxOf=orders.map(o=>new Map(o.map((k,i)=>[k,i])));
-  const highlight=(ci,key)=>{
-    host.classList.add('hl'); paths.forEach(p=>p.classList.remove('on'));
-    items.forEach(it=>{ if(it[ci]!==key) return; for(let i=0;i<3;i++){ const p=paths.get(`${i}:${idxOf[i].get(it[i])}:${idxOf[i+1].get(it[i+1])}`); if(p) p.classList.add('on'); } });
+  const bar=st=>{ const n=st.reduce((s,v)=>s+v,0);
+    return `<span class="tr-bar">${st.map((v,i)=>v?`<i style="width:${v/n*100}%;background:${cats[i].c}"></i>`:'').join('')}</span>`; };
+  const tip=st=>st.map((v,i)=>v?`${cats[i].l}: ${v}`:'').filter(Boolean).join(' | ');
+  const flag=st=>{
+    if(m==='comp'){ const v=st[catIdx.get('Ativo – prazo vencido')]||0; return v?`<span class="tr-pill bad" title="Compromissos ativos com prazo de término já vencido">${v} vencido${v>1?'s':''}</span>`:''; }
+    const g=k=>st[catIdx.get(k)]||0, ok=g('Alcançada Totalmente'), av=ok+g('Alcançada Parcialmente')+g('Não Alcançada');
+    if(!av) return '<span class="tr-pill" style="background:#eef1f6;color:#64748b" title="Nenhum resultado avaliado ainda">sem avaliação</span>';
+    const pc=Math.round(ok/av*100), cl=pc>=85?'ok':pc>=60?'warn':'bad';
+    return `<span class="tr-pill ${cl}" title="Alcance: ${ok} de ${av} resultados avaliados alcançados totalmente (previstos não entram na conta)">${pc}% alcance</span>`;
   };
-  const clear=()=>host.classList.remove('hl');
-  host.querySelectorAll('.nd').forEach(g=>{
-    const ci=+g.dataset.c, key=orders[ci][+g.dataset.i];
-    g.addEventListener('mouseenter',()=>highlight(ci,key)); g.addEventListener('focus',()=>highlight(ci,key));
-    g.addEventListener('mouseleave',clear); g.addEventListener('blur',clear);
-    const act=()=>{
-      if(key==='∅') return;
-      const f = ci===0?'meta':ci===1?'portfolio':ci===2?'desafio':(m==='comp'?'comp_st':'res_sit');
-      toggleFilter(f,key);
-    };
-    g.addEventListener('click',act); g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } });
+  const card=(lvl,key,node,title,full,color,f)=>{
+    const sel = f && FILTERS[f]===key;
+    const attrs = f ? `data-f="${f}" data-k="${esc(key)}" tabindex="0" role="button"` : '';
+    return `<div class="tr-card c${lvl}${sel?' sel':''}${f?'':' nolink'}" style="--c:${color}" ${attrs} title="${esc(full)}\n${node.n} ${node.n===1?unit1:unitN} — ${esc(tip(node.st))}${f?(sel?'\nClique para remover o filtro.':'\nClique para filtrar o painel.'):''}">
+      <div class="tr-t">${title}</div>
+      <div class="tr-m"><b>${fmt(node.n)}</b>${bar(node.st)}${flag(node.st)}</div></div>`;
+  };
+  const byN=(A,B)=>B[1].n-A[1].n;
+  const metas=[...root.kids].sort((A,B)=>cmp(metaKey(A[0]),metaKey(B[0])));
+  let html='';
+  metas.forEach(([me,a])=>{
+    const M=D.meta[me];
+    const mt=`<span class="code${M.v?'':' mut'}">${esc(M.c)}</span>${esc(M.v?M.t:'Sem vínculo à meta estratégica')}`;
+    html+=`<div class="tr-meta">${card(1,me,a,mt,metaFull(me),M.v?'#00b894':'#95a5a6','meta')}<div class="tr-kids">`;
+    [...a.kids].sort((A,B)=>(A[0]==='∅')-(B[0]==='∅')||byN(A,B)).forEach(([p,b])=>{
+      const pn=p==='∅';
+      html+=`<div class="tr-row">${card(2,p,b,esc(pn?'Sem portfólio (gestão)':p),pn?'Compromissos de gestão, sem desafio de inovação':'Portfólio: '+p,pn?'#95a5a6':portColor(p),pn?'':'portfolio')}`;
+      if(SK.lv>=3 && !pn){
+        html+='<div class="tr-kids">';
+        [...b.kids].sort(byN).forEach(([de,c])=>{
+          const De=D.des[de];
+          html+=`<div class="tr-row">${card(3,de,c,esc(De?De.t:de),'Desafio de inovação: '+(De?De.t:de),portColor(p),'desafio')}</div>`;
+        });
+        html+='</div>';
+      }
+      html+='</div>';
+    });
+    html+='</div></div>';
   });
-  const ports=o1.filter(p=>p!=='∅');
-  document.getElementById('sk-legend').innerHTML = '<span><i style="background:#00b894"></i>Meta estratégica do PDE</span><span><i style="background:#95a5a6"></i>Sem vínculo à meta</span>' +
-    ports.map(p=>`<span><i style="background:${portColor(p)}"></i>${esc(p)}</span>`).join('');
+  host.innerHTML=`<div class="tree lv${SK.lv}">${html}</div>`;
+  box.classList.toggle('lv2',SK.lv<3);
+  box.querySelector('.tr-h3').style.visibility = SK.lv<3?'hidden':'';
+  host.querySelectorAll('.tr-card[data-f]').forEach(el=>{
+    const act=()=>toggleFilter(el.dataset.f, el.dataset.k);
+    el.addEventListener('click',act);
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } });
+  });
 }
 
 // ========= HEATMAP =========
@@ -1199,6 +1237,31 @@ function renderMetas(AG){
 
 // ========= COMPROMISSOS =========
 let cpage=0, CSEARCH='';
+const CF={sit:'',part:'',resp:''};
+function compPart(C){ return C.pa.startsWith('Exclusivo')?'Exclusivo':C.pa.includes('líder')?'Líder':'Participante'; }
+function compSit(C){ return C.s!=='Ativo' ? C.s : +C.f<+YEAR ? 'Ativo – prazo vencido' : +C.f===+YEAR ? 'Ativo – encerra em '+YEAR : 'Ativo – no prazo'; }
+function compResp(C){ return nome(C.r)||'(sem responsável informado)'; }
+const CF_GET={sit:C=>[C.s,compSit(C)], part:C=>[compPart(C)], resp:C=>[compResp(C)]};
+function cfPass(C,skip){ return Object.keys(CF).every(k=>k===skip||!CF[k]||CF_GET[k](C).includes(CF[k])); }
+function cfOptions(){
+  const base=[...CUR_AG.values()].map(c=>D.comp[c.id]);
+  const labels={sit:'Todas as situações',part:'Todas as participações',resp:'Todos os responsáveis'};
+  Object.keys(CF).forEach(k=>{
+    const cnt=new Map();
+    base.filter(C=>cfPass(C,k)).forEach(C=>new Set(CF_GET[k](C)).forEach(v=>cnt.set(v,(cnt.get(v)||0)+1)));
+    if(CF[k] && !cnt.has(CF[k])) cnt.set(CF[k],0);
+    let vals=[...cnt.keys()];
+    if(k==='sit'){ const ord=v=>v==='Ativo'?0:v.startsWith('Ativo')?1:2; vals.sort((a,b)=>ord(a)-ord(b)||cmp(a,b)); }
+    else if(k==='part'){ const o=['Exclusivo','Líder','Participante']; vals.sort((a,b)=>o.indexOf(a)-o.indexOf(b)); }
+    else vals.sort((a,b)=>(a.startsWith('(')?1:0)-(b.startsWith('(')?1:0)||cmp(a,b));
+    const sel=document.getElementById('cf-'+k);
+    sel.innerHTML=`<option value="">${labels[k]}</option>`+vals.map(v=>`<option value="${esc(v)}"${v===CF[k]?' selected':''}>${k==='sit'&&v.startsWith('Ativo – ')?'\u00a0\u00a0↳ '+esc(v.slice(8)):esc(v)} (${fmt(cnt.get(v))})</option>`).join('');
+    sel.classList.toggle('on',!!CF[k]);
+  });
+  document.getElementById('cf-clear').hidden=!Object.values(CF).some(Boolean);
+}
+['sit','part','resp'].forEach(k=>document.getElementById('cf-'+k).addEventListener('change',e=>{ CF[k]=e.target.value; cpage=0; renderCompTable(); }));
+document.getElementById('cf-clear').addEventListener('click',()=>{ Object.keys(CF).forEach(k=>CF[k]=''); cpage=0; renderCompTable(); });
 const CPAGE=15;
 document.getElementById('comp-search').addEventListener('input',e=>{ CSEARCH=e.target.value.trim().toLowerCase(); cpage=0; renderCompTable(); });
 document.getElementById('comp-sort').addEventListener('change',()=>{ cpage=0; renderCompTable(); });
@@ -1207,7 +1270,7 @@ document.getElementById('cpg-next').addEventListener('click',()=>{ cpage++; rend
 document.getElementById('comp-csv').addEventListener('click',exportCSV);
 
 function compList(){
-  let list=[...CUR_AG.values()];
+  let list=[...CUR_AG.values()].filter(c=>cfPass(D.comp[c.id]));
   if(CSEARCH) list=list.filter(c=>{ const C=D.comp[c.id], M=D.meta[C.me], De=C.de?D.des[C.de]:null;
     return [C.t,C.r,C.pa,M.c,M.t,De&&De.t,De&&De.p].filter(Boolean).join(' ').toLowerCase().includes(CSEARCH); });
   const s=document.getElementById('comp-sort').value;
@@ -1222,6 +1285,7 @@ function compList(){
   return list.sort(sorters[s]);
 }
 function renderCompTable(){
+  cfOptions();
   const list=compList(), total=list.length, pages=Math.max(1,Math.ceil(total/CPAGE));
   if(cpage>=pages) cpage=pages-1; if(cpage<0) cpage=0;
   const slice=list.slice(cpage*CPAGE,(cpage+1)*CPAGE);
@@ -1231,7 +1295,7 @@ function renderCompTable(){
   const body=document.getElementById('comp-body');
   body.innerHTML = slice.length ? slice.map(c=>{
     const C=D.comp[c.id], M=D.meta[C.me], De=C.de?D.des[C.de]:null, sel=FILTERS.comp===c.id;
-    const part = C.pa.startsWith('Exclusivo')?'Exclusivo':C.pa.includes('líder')?'Líder':'Participante';
+    const part = compPart(C);
     const due = C.s!=='Ativo' ? '' : +C.f<+YEAR ? `<div><span class="tag bad">Prazo vencido (${C.f})</span></div>` : +C.f===+YEAR ? `<div><span class="tag warn">Encerra em ${C.f}</span></div>` : '';
     const lb = C.lb ? `<div class="t-sub">Indicador: ${esc(C.lb)}${C.q||C.vp?` · base ${esc(C.q||'—')} → meta ${esc(C.vp||'—')}`:''}</div>` : '';
     return `<tr class="${sel?'sel':''}">
@@ -1457,7 +1521,7 @@ function loadData(nd){
   initPortColors(); initOdsNames(); setHeaderInfo();
   ROWS=buildRows();
   Object.keys(FILTERS).forEach(k=>FILTERS[k]='');
-  SEARCH=''; CSEARCH=''; document.getElementById('tbl-search').value=''; document.getElementById('comp-search').value='';
+  SEARCH=''; CSEARCH=''; document.getElementById('tbl-search').value=''; document.getElementById('comp-search').value=''; Object.keys(CF).forEach(k=>CF[k]='');
   OPEN.clear(); page=0; cpage=0;
   refresh();
 }
