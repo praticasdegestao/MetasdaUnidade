@@ -218,8 +218,8 @@
   .preset{border:1px solid #dbe3ec;background:#f8fafc;color:#334155;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
   .preset:hover{border-color:#0984e3;color:#0984e3;}
   .preset.on{background:#0f2027;border-color:#0f2027;color:#fff;}
-  .fp-primary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:14px 22px 18px;}
-  @media(max-width:1350px){.fp-primary{grid-template-columns:repeat(4,minmax(0,1fr));}}
+  .fp-primary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding:14px 22px 18px;}
+  @media(max-width:1350px){.fp-primary{grid-template-columns:repeat(3,minmax(0,1fr));}}
   @media(max-width:900px){.fp-primary{grid-template-columns:repeat(2,minmax(0,1fr));}}
   @media(max-width:700px){.fp-primary{grid-template-columns:1fr;}}
   .fpanel label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:6px;}
@@ -411,6 +411,7 @@
       <label>Situação<select id="cf-sit" class="sm cf-sel" aria-label="Filtrar por situação"></select></label>
       <label>Participação<select id="cf-part" class="sm cf-sel" aria-label="Filtrar por participação"></select></label>
       <label>Responsável<select id="cf-resp" class="sm cf-sel" aria-label="Filtrar por responsável"></select></label>
+      <label>Alcance<select id="cf-alc" class="sm cf-sel" aria-label="Filtrar por alcance"></select></label>
       <button class="btn-ghost" id="cf-clear" hidden>× Limpar filtros da lista</button>
     </div>
     <div class="table-wrap">
@@ -797,7 +798,7 @@ const FG = [
 const FDEF = {}; FG.forEach(g=>g.f.forEach(([k,l,disp,sorter])=>FDEF[k]={label:l,disp:disp||(v=>v),sorter:sorter||cmp}));
 const FILTERS = {}; Object.keys(FDEF).forEach(k=>FILTERS[k]='');
 
-const PRIMARY = ['objetivo','meta','portfolio','desafio','comp','comp_st','comp_fim','res_sit'];
+const PRIMARY = ['categoria','objetivo','meta','portfolio','desafio','comp','comp_st','comp_fim','res_sit'];
 (function buildFilterUI(){
   const sel = k => `<div class="flt"><label for="f-${k}">${FDEF[k].label}</label><select id="f-${k}" data-k="${k}"></select></div>`;
   document.getElementById('flt-primary').innerHTML = PRIMARY.map(sel).join('');
@@ -1237,15 +1238,17 @@ function renderMetas(AG){
 
 // ========= COMPROMISSOS =========
 let cpage=0, CSEARCH='';
-const CF={sit:'',part:'',resp:''};
+const CF={sit:'',part:'',resp:'',alc:''};
 function compPart(C){ return C.pa.startsWith('Exclusivo')?'Exclusivo':C.pa.includes('líder')?'Líder':'Participante'; }
 function compSit(C){ return C.s!=='Ativo' ? C.s : +C.f<+YEAR ? 'Ativo – prazo vencido' : +C.f===+YEAR ? 'Ativo – encerra em '+YEAR : 'Ativo – no prazo'; }
 function compResp(C){ return nome(C.r)||'(sem responsável informado)'; }
-const CF_GET={sit:C=>[C.s,compSit(C)], part:C=>[compPart(C)], resp:C=>[compResp(C)]};
-function cfPass(C,skip){ return Object.keys(CF).every(k=>k===skip||!CF[k]||CF_GET[k](C).includes(CF[k])); }
+const ALC_ORD=['No alvo','Atenção','Crítico','Sem avaliação'];
+function compAlc(c){ const a=c.rc.alc; if(a==null) return 'Sem avaliação'; const p=Math.round(a*100); return p>=85?'No alvo':p>=60?'Atenção':'Crítico'; }
+const CF_GET={sit:c=>{const C=D.comp[c.id]; return [C.s,compSit(C)];}, part:c=>[compPart(D.comp[c.id])], resp:c=>[compResp(D.comp[c.id])], alc:c=>[compAlc(c)]};
+function cfPass(c,skip){ return Object.keys(CF).every(k=>k===skip||!CF[k]||CF_GET[k](c).includes(CF[k])); }
 function cfOptions(){
-  const base=[...CUR_AG.values()].map(c=>D.comp[c.id]);
-  const labels={sit:'Todas as situações',part:'Todas as participações',resp:'Todos os responsáveis'};
+  const base=[...CUR_AG.values()];
+  const labels={sit:'Todas as situações',part:'Todas as participações',resp:'Todos os responsáveis',alc:'Todas as faixas'};
   Object.keys(CF).forEach(k=>{
     const cnt=new Map();
     base.filter(C=>cfPass(C,k)).forEach(C=>new Set(CF_GET[k](C)).forEach(v=>cnt.set(v,(cnt.get(v)||0)+1)));
@@ -1253,6 +1256,7 @@ function cfOptions(){
     let vals=[...cnt.keys()];
     if(k==='sit'){ const ord=v=>v==='Ativo'?0:v.startsWith('Ativo')?1:2; vals.sort((a,b)=>ord(a)-ord(b)||cmp(a,b)); }
     else if(k==='part'){ const o=['Exclusivo','Líder','Participante']; vals.sort((a,b)=>o.indexOf(a)-o.indexOf(b)); }
+    else if(k==='alc') vals.sort((a,b)=>ALC_ORD.indexOf(a)-ALC_ORD.indexOf(b));
     else vals.sort((a,b)=>(a.startsWith('(')?1:0)-(b.startsWith('(')?1:0)||cmp(a,b));
     const sel=document.getElementById('cf-'+k);
     sel.innerHTML=`<option value="">${labels[k]}</option>`+vals.map(v=>`<option value="${esc(v)}"${v===CF[k]?' selected':''}>${k==='sit'&&v.startsWith('Ativo – ')?'\u00a0\u00a0↳ '+esc(v.slice(8)):esc(v)} (${fmt(cnt.get(v))})</option>`).join('');
@@ -1260,7 +1264,7 @@ function cfOptions(){
   });
   document.getElementById('cf-clear').hidden=!Object.values(CF).some(Boolean);
 }
-['sit','part','resp'].forEach(k=>document.getElementById('cf-'+k).addEventListener('change',e=>{ CF[k]=e.target.value; cpage=0; renderCompTable(); }));
+['sit','part','resp','alc'].forEach(k=>document.getElementById('cf-'+k).addEventListener('change',e=>{ CF[k]=e.target.value; cpage=0; renderCompTable(); }));
 document.getElementById('cf-clear').addEventListener('click',()=>{ Object.keys(CF).forEach(k=>CF[k]=''); cpage=0; renderCompTable(); });
 const CPAGE=15;
 document.getElementById('comp-search').addEventListener('input',e=>{ CSEARCH=e.target.value.trim().toLowerCase(); cpage=0; renderCompTable(); });
@@ -1270,7 +1274,7 @@ document.getElementById('cpg-next').addEventListener('click',()=>{ cpage++; rend
 document.getElementById('comp-csv').addEventListener('click',exportCSV);
 
 function compList(){
-  let list=[...CUR_AG.values()].filter(c=>cfPass(D.comp[c.id]));
+  let list=[...CUR_AG.values()].filter(c=>cfPass(c));
   if(CSEARCH) list=list.filter(c=>{ const C=D.comp[c.id], M=D.meta[C.me], De=C.de?D.des[C.de]:null;
     return [C.t,C.r,C.pa,M.c,M.t,De&&De.t,De&&De.p].filter(Boolean).join(' ').toLowerCase().includes(CSEARCH); });
   const s=document.getElementById('comp-sort').value;
